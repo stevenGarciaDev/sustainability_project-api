@@ -19,10 +19,31 @@ const AuthController = (server) => {
             password: hashedPassword,
           });
         });
-        return { token: generateToken(user.id) };
+        return generateToken(user.id);
       } catch (error) {
         throw Boom.badRequest(error);
       }
+    },
+    options: {
+      validate: {
+        payload: User.joiSchema,
+      },
+    },
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/login',
+    handler: async (req, h) => {
+      const { username, password } = req.payload;
+      const user = await User.query().findOne({
+        username,
+      });
+      const isValid = await bcrypt.compare(password, user.password);
+      if (isValid) {
+        return generateToken(user.id);
+      }
+      throw Boom.badRequest('Invalid credentials');
     },
     options: {
       validate: {

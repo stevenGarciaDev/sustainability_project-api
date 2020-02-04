@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js --ext js,json --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate": "knex migrate:latest",
+    "seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^9.0.0",
     "@hapi/hapi": "^19.1.0",
     "@hapi/joi": "^17.1.0",
     "dotenv": "^8.2.0",
@@ -23,7 +25,6 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/node": "^7.8.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "nodemon": "^2.0.2"
   }

@@ -1,7 +1,9 @@
-import * as Hapi from '@hapi/hapi';
-import * as Schwifty from 'schwifty';
+import Hapi from '@hapi/hapi';
+import Schwifty from 'schwifty';
 import { Model, knexSnakeCaseMappers } from 'objection';
 import Knex from 'knex';
+
+import { AuthController } from './controllers';
 
 export default async (port, host) => {
   const server = new Hapi.Server({
@@ -26,6 +28,8 @@ export default async (port, host) => {
     plugin: Schwifty.plugin,
     options: { knex: knex },
   });
+
+  AuthController(server);
 
   return server;
 };

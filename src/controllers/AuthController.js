@@ -1,4 +1,8 @@
 import Boom from '@hapi/boom';
+import bcrypt from 'bcrypt';
+import { transaction } from 'objection';
+
+import { generateToken } from '../auth-utils';
 import User from '../models/User';
 
 const AuthController = (server) => {
@@ -7,16 +11,23 @@ const AuthController = (server) => {
     path: '/signup',
     handler: async (req, h) => {
       const { username, password } = req.payload;
-      const { error } = User.joiSchema.validate({ username, password });
-      if (error) {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      try {
+        const user = await transaction(User, async (User) => {
+          return await User.query().insert({
+            username,
+            password: hashedPassword,
+          });
+        });
+        return { token: generateToken(user.id) };
+      } catch (error) {
         throw Boom.badRequest(error);
       }
-
-      const user = await User.query().insert({
-        username,
-        password,
-      });
-      return user;
+    },
+    options: {
+      validate: {
+        payload: User.joiSchema,
+      },
     },
   });
 };

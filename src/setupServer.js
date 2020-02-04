@@ -3,6 +3,7 @@ import Schwifty from 'schwifty';
 import { Model, knexSnakeCaseMappers } from 'objection';
 import Knex from 'knex';
 
+import { validateToken } from './auth-utils';
 import { AuthController } from './controllers';
 
 export default async (port, host) => {
@@ -10,6 +11,19 @@ export default async (port, host) => {
     port: port,
     host: host,
   });
+
+  const jwtScheme = () => {
+    return {
+      authenticate: (request, h) => {
+        const userId = validateToken(request);
+        return h.authenticated({ credentials: { userId } });
+      },
+    };
+  };
+
+  server.auth.scheme('jwt', jwtScheme);
+  server.auth.strategy('jwt', 'jwt');
+  server.auth.default('jwt');
 
   const DATABASE_URL =
     process.env.NODE_ENV === 'test'

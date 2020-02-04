@@ -25,6 +25,7 @@ const AuthController = (server) => {
       }
     },
     options: {
+      auth: false,
       validate: {
         payload: User.joiSchema,
       },

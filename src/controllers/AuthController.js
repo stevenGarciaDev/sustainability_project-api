@@ -9,12 +9,12 @@ const AuthController = (server) => {
   server.route({
     method: 'POST',
     path: '/signup',
-    handler: async (req, h) => {
+    handler: async (req) => {
       const { username, password } = req.payload;
       const hashedPassword = await bcrypt.hash(password, 12);
       try {
         const user = await transaction(User, async (User) => {
-          return await User.query().insert({
+          return User.query().insert({
             username,
             password: hashedPassword,
           });
@@ -35,7 +35,7 @@ const AuthController = (server) => {
   server.route({
     method: 'POST',
     path: '/login',
-    handler: async (req, h) => {
+    handler: async (req) => {
       const { username, password } = req.payload;
       const user = await User.query().findOne({
         username,

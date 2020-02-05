@@ -1,6 +1,5 @@
-import BaseModel from './BaseModel';
-
 import Joi from '@hapi/joi';
+import BaseModel from './BaseModel';
 
 class User extends BaseModel {
   static get tableName() {

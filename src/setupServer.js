@@ -8,8 +8,8 @@ import { AuthController } from './controllers';
 
 export default async (port, host) => {
   const server = new Hapi.Server({
-    port: port,
-    host: host,
+    port,
+    host,
   });
 
   const jwtScheme = () => {
@@ -40,7 +40,7 @@ export default async (port, host) => {
 
   await server.register({
     plugin: Schwifty.plugin,
-    options: { knex: knex },
+    options: { knex },
   });
 
   AuthController(server);

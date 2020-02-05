@@ -1,4 +1,6 @@
+/* eslint-disable import/first */
 require('dotenv').config();
+
 import setupServer from './setupServer';
 
 const init = async () => {

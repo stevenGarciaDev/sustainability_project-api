@@ -9,7 +9,7 @@ export default (request) => {
   }
   const token = authorization.replace('Bearer ', '');
   let decoded;
-  //If verify fails, it will throw an error by itself
+  // If verify fails, it will throw an error by itself
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {

@@ -13,6 +13,10 @@
 
 - Open up `pgAdmin`, a GUI to manage postgres databases, and create two databases, one named `sustainability_project` and another named `sustainability_project_test`
 
+- Run `npm run migrate` to create/update the database schema
+
+- Run `npm run seed` to add some dummy data
+
 - Run `npm install` to install all node modules.
 
 - Create a file called `.env` in the root directory of the project folder. There is an example of what it should look like in a file called `.env.example`

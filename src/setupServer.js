@@ -10,6 +10,13 @@ export default async (port, host) => {
   const server = new Hapi.Server({
     port,
     host,
+    routes: {
+      cors: {
+        origin: ['*'],
+        headers: ['Accept', 'Content-Type'],
+        additionalHeaders: ['X-Requested-With'],
+      },
+    },
   });
 
   const jwtScheme = () => {

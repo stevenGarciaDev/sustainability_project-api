@@ -47,6 +47,7 @@ const AuthController = (server) => {
       throw Boom.badRequest('Invalid credentials');
     },
     options: {
+      auth: false,
       validate: {
         payload: User.joiSchema,
       },

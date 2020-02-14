@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 exports.seed = async function(knex) {
   await knex('user').del();

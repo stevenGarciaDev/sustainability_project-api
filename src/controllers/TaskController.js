@@ -1,5 +1,4 @@
 import Boom from '@hapi/boom';
-import { transaction } from 'objection';
 
 import Task from '../models/Task';
 
@@ -22,10 +21,10 @@ const TaskController = (server) => {
     path: '/task',
     handler: async (req) => {
       console.log('payload', req.payload);
-      // modify data 
+      // modify data
       // update database
       // return updated object
-      return "test";
+      return 'test';
     },
   });
 };

@@ -13,7 +13,13 @@ export default async (port, host) => {
     routes: {
       cors: {
         origin: ['*'],
-        headers: ['Accept', 'Content-Type'],
+        headers: [
+          'Accept',
+          'Authorization',
+          'Content-Type',
+          'If-None-Match',
+          'Accept-language',
+        ],
         additionalHeaders: ['X-Requested-With'],
       },
     },

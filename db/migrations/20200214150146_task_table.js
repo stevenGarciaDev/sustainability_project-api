@@ -8,10 +8,6 @@ exports.up = function(knex) {
       .string('name')
       .notNullable()
       .unique();
-    table
-      .integer('totalCount')
-      .unsigned()
-      .notNullable();
   });
 };
 

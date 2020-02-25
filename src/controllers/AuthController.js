@@ -40,7 +40,7 @@ const AuthController = (server) => {
       const user = await User.query().findOne({
         username,
       });
-      if(!user){
+      if (!user) {
         throw Boom.badData('User does not exist');
       }
       const isValid = await bcrypt.compare(password, user.password);

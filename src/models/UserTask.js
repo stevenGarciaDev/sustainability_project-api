@@ -10,6 +10,10 @@ class UserTask extends BaseModel {
     return 'user_task';
   }
 
+  $beforeUpdate() {
+    this.updated_at = new Date().toISOString();
+  }
+
   static get joiSchema() {
     return Joi.object({
       id: Joi.string(),

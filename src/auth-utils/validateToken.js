@@ -4,7 +4,6 @@ import Boom from '@hapi/boom';
 export default (request) => {
   const req = request.raw.req;
   const authorization = req.headers.authorization;
-  console.log('req.headers', req.headers);
   if (!authorization) {
     throw Boom.unauthorized();
   }

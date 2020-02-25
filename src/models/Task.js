@@ -8,7 +8,7 @@ class Task extends BaseModel {
 
   static get joiSchema() {
     return Joi.object({
-      id: Joi.string(),
+      id: Joi.string().guid(),
       name: Joi.string()
         .min(5)
         .max(40)

@@ -8,7 +8,7 @@ class User extends BaseModel {
 
   static get joiSchema() {
     return Joi.object({
-      id: Joi.string(),
+      id: Joi.string().guid(),
       username: Joi.string()
         .min(3)
         .max(30)

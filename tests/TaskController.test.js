@@ -17,7 +17,7 @@ describe('TaskController', () => {
   });
 
   describe('#get /tasks', () => {
-    it('returns an array of tasks with their total count', async () => {
+    it('returns an array of tasks with their total count and UserTask for the logged in user', async () => {
       const res = await server.inject({
         method: 'get',
         url: '/tasks',
@@ -29,11 +29,21 @@ describe('TaskController', () => {
 
       expect(await JSON.parse(res.payload)).toEqual(
         expect.arrayContaining(
-          tasks.map((task) =>
-            expect.objectContaining({
-              id: task.id,
-              name: task.name,
-              totalCount: expect.any(Number),
+          await Promise.all(
+            tasks.map(async (task) => {
+              const userTask = await UserTask.query().findOne({
+                taskId: task.id,
+                userId: users[0].id,
+              });
+
+              return expect.objectContaining({
+                id: task.id,
+                name: task.name,
+                totalCount: expect.any(Number),
+                userTask: {
+                  ...userTask,
+                },
+              });
             })
           )
         )

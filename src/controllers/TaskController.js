@@ -26,7 +26,7 @@ const TaskController = async (server) => {
   server.route({
     method: 'GET',
     path: '/tasks',
-    handler: async () => {
+    handler: async (req) => {
       try {
         const tasks = await Task.query();
         const tasksWithTotals = await Promise.all(
@@ -40,9 +40,18 @@ const TaskController = async (server) => {
             if (temp[0].sum) {
               totalCount = Number(temp[0].sum);
             }
+            const { userId } = req.auth.credentials;
+            const userTask = await UserTask.query().findOne({
+              task_id: task.id,
+              user_id: userId,
+            });
+
             return {
               ...task,
               totalCount,
+              userTask: {
+                ...userTask,
+              },
             };
           })
         );
@@ -58,7 +67,8 @@ const TaskController = async (server) => {
     path: '/task',
     handler: async (req) => {
       try {
-        const { userId, taskId } = req.payload;
+        const { userId } = req.auth.credentials;
+        const { taskId } = req.payload;
         const userTask = await transaction(UserTask, async (UserTask) => {
           const where = {
             userId,

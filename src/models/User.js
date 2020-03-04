@@ -16,6 +16,9 @@ class User extends BaseModel {
       password: Joi.string()
         .min(8)
         .required(),
+      bio: Joi.string()
+        .min(0)
+        .max(144),
     });
   }
 }

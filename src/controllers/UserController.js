@@ -29,13 +29,20 @@ const UserController = async (server) => {
     path: '/updateProfileSettings',
     handler: async (req) => {
       try {
+        console.log('payload', req.payload.profile_photo);
         const { userId } = req.auth.credentials;
         const where = { id: userId };
 				const user = await User.query().findOne(where);
         if (user && req.payload.bio) {
           return User.query()
             .findOne(where)
-            .update({ ...user, bio : req.payload.bio })
+            .update({
+              username: user.username,
+              password: user.password,
+              id: user.id,
+              profile_photo: req.payload.profile_photo,
+              bio: req.payload.bio,
+            })
 						.returning('*')
             .catch((err) => console.log('error', err));
         }

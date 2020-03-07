@@ -19,6 +19,9 @@ class User extends BaseModel {
       bio: Joi.string()
         .min(0)
         .max(144),
+      profile_photo: Joi.string()
+        .min(3)
+        .max(300),
     });
   }
 }

@@ -18,11 +18,10 @@ const UserController = async (server) => {
           });
         return response;
       } catch (err) {
-        console.log(`err is ${err}`);
+        throw Boom.badRequest(err);
       }
-      return [];
     },
-	});
+  });
 
   server.route({
     method: 'PUT',
@@ -32,7 +31,7 @@ const UserController = async (server) => {
         console.log('payload', req.payload.profile_photo);
         const { userId } = req.auth.credentials;
         const where = { id: userId };
-				const user = await User.query().findOne(where);
+        const user = await User.query().findOne(where);
         if (user && req.payload.bio) {
           return User.query()
             .findOne(where)
@@ -43,11 +42,11 @@ const UserController = async (server) => {
               profile_photo: req.payload.profile_photo,
               bio: req.payload.bio,
             })
-						.returning('*')
-            .catch((err) => console.log('error', err));
+            .returning('*')
+            .catch((err) => console.error(err));
         }
       } catch (err) {
-				console.log(err);
+        console.log(err);
       }
       return [];
     },

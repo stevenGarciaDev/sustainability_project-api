@@ -24,11 +24,24 @@ const UserController = async (server) => {
   });
 
   server.route({
+    method: 'GET',
+    path: '/allUsers',
+    handler: async (req) => {
+      try {
+        const users = await User.query()
+          .select('username', 'profilePhoto');
+        return users;
+      } catch (err) {
+        throw Boom.badRequest(err);
+      }
+    }
+  });
+
+  server.route({
     method: 'PUT',
     path: '/updateProfileSettings',
     handler: async (req) => {
       try {
-        console.log('payload', req.payload.profile_photo);
         const { userId } = req.auth.credentials;
         const where = { id: userId };
         const user = await User.query().findOne(where);

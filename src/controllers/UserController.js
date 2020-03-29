@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom';
 
 import { User } from '../models';
+import { UserConnection } from '../models';
 
 const UserController = async (server) => {
   server.route({
@@ -28,9 +29,31 @@ const UserController = async (server) => {
     path: '/allUsers',
     handler: async (req) => {
       try {
+        const { userId } = req.auth.credentials;
         const users = await User.query()
-          .select('username', 'profilePhoto');
+          .select('id', 'username', 'profilePhoto')
+          .whereNot('id', userId);
         return users;
+      } catch (err) {
+        throw Boom.badRequest(err);
+      }
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/retrieveFollowedUsers',
+    handler: async (req) => {
+      try {
+        const { userId } = req.auth.credentials;
+        const response = await UserConnection.query()
+        .where({
+          follower_id: userId,
+        }).then((data) => {
+          console.log("data", data);
+          return data;
+        });
+        return response;
       } catch (err) {
         throw Boom.badRequest(err);
       }
@@ -64,6 +87,42 @@ const UserController = async (server) => {
       return [];
     },
   });
+
+  server.route({
+    method: 'POST',
+    path: '/followUser',
+    handler: async (req) => {
+      try {
+        const { userId } = req.auth.credentials;
+        const response = await UserConnection.query().insert({
+          follower_id: userId,
+          user_followed_id: req.payload.user_to_follow_id,
+        });
+        return response;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  });
+
+  server.route({
+    method: 'POST',
+    path: '/unfollowUser',
+    handler: async (req) => {
+      try {
+        const { userId } = req.auth.credentials;
+        console.log("payload", req.payload.user_followed_id);
+        const response = await UserConnection.query()
+          .delete()
+          .where('user_followed_id', req.payload.user_followed_id)
+          .where('follower_id', userId);
+        console.log("response", response);
+        return response;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  })
 };
 
 export default UserController;

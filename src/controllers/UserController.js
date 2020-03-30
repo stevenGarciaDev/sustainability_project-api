@@ -40,6 +40,8 @@ const UserController = async (server) => {
     }
   });
 
+  // get an array for the users whom the current user, userId,
+  // is following
   server.route({
     method: 'GET',
     path: '/retrieveFollowedUsers',
@@ -47,18 +49,38 @@ const UserController = async (server) => {
       try {
         const { userId } = req.auth.credentials;
         const response = await UserConnection.query()
-        .where({
-          follower_id: userId,
-        }).then((data) => {
-          console.log("data", data);
-          return data;
-        });
+          .where({
+            follower_id: userId,
+          }).then((data) => {
+            return data;
+          });
         return response;
       } catch (err) {
         throw Boom.badRequest(err);
       }
     }
   });
+
+  // get an array for the users who are following
+  // the current user, userId
+  server.route({
+    method: 'GET',
+    path: '/retrieveFollowers',
+    handler: async (req) => {
+      try {
+        const { userId } = req.auth.credentials;
+        const response = await UserConnection.query()
+          .where({
+            user_followed_id: userId
+          }).then((data) => {
+            return data;
+          });
+          return response;
+      } catch (err) {
+        throw Boom.badRequest(err);
+      }
+    }
+  })
 
   server.route({
     method: 'PUT',
@@ -111,12 +133,10 @@ const UserController = async (server) => {
     handler: async (req) => {
       try {
         const { userId } = req.auth.credentials;
-        console.log("payload", req.payload.user_followed_id);
         const response = await UserConnection.query()
           .delete()
           .where('user_followed_id', req.payload.user_followed_id)
           .where('follower_id', userId);
-        console.log("response", response);
         return response;
       } catch (err) {
         console.log(err);

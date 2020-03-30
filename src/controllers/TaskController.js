@@ -63,6 +63,22 @@ const TaskController = async (server) => {
   });
 
   server.route({
+    method: 'GET',
+    path: '/retrieveUserTaskCount',
+    handler: async (req) => {
+      try {
+        const { userId } = req.auth.credentials;
+        const response = await UserTask.query()
+          .sum('count')
+          .where('user_id', userId);
+        return response[0];
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  })
+
+  server.route({
     method: 'PUT',
     path: '/task',
     handler: async (req) => {

@@ -4,7 +4,7 @@ import { Model, knexSnakeCaseMappers } from 'objection';
 import Knex from 'knex';
 
 import { validateToken } from './auth-utils';
-import { AuthController } from './controllers';
+import { AuthController, TaskController, UserController } from './controllers';
 
 export default async (port, host) => {
   const server = new Hapi.Server({
@@ -57,6 +57,8 @@ export default async (port, host) => {
   });
 
   AuthController(server);
+  TaskController(server);
+  UserController(server);
 
   return server;
 };

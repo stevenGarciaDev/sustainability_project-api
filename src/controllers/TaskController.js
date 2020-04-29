@@ -74,6 +74,7 @@ const TaskController = async (server) => {
         return response[0];
       } catch (err) {
         console.log(err);
+        return Boom.badRequest();
       }
     },
   });

@@ -75,8 +75,8 @@ const TaskController = async (server) => {
       } catch (err) {
         console.log(err);
       }
-    }
-  })
+    },
+  });
 
   server.route({
     method: 'PUT',
@@ -105,6 +105,27 @@ const TaskController = async (server) => {
         return userTask;
       } catch (err) {
         return err;
+      }
+    },
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/task/leaderboard',
+    handler: async (req) => {
+      const { taskId } = req.query;
+      try {
+        const userTasks = await UserTask.query()
+          .join('user', 'user.id', 'user_task.user_id')
+          .select(['task_id', 'user_id', 'username', 'profile_photo', 'count'])
+          .orderBy('count', 'desc')
+          .where({
+            taskId,
+          });
+
+        return userTasks;
+      } catch (error) {
+        throw Boom.badRequest();
       }
     },
   });

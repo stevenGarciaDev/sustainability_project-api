@@ -22,6 +22,8 @@ class User extends BaseModel {
       profile_photo: Joi.string()
         .min(3)
         .max(300),
+      firstName: Joi.string(),
+      lastName: Joi.string(),
     });
   }
 }

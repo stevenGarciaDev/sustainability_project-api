@@ -1,7 +1,6 @@
 import Boom from '@hapi/boom';
 
-import { User } from '../models';
-import { UserConnection } from '../models';
+import { User, UserConnection } from '../models';
 
 const UserController = async (server) => {
   server.route({
@@ -37,7 +36,7 @@ const UserController = async (server) => {
       } catch (err) {
         throw Boom.badRequest(err);
       }
-    }
+    },
   });
 
   // get an array for the users whom the current user, userId,
@@ -51,14 +50,15 @@ const UserController = async (server) => {
         const response = await UserConnection.query()
           .where({
             follower_id: userId,
-          }).then((data) => {
+          })
+          .then((data) => {
             return data;
           });
         return response;
       } catch (err) {
         throw Boom.badRequest(err);
       }
-    }
+    },
   });
 
   // get an array for the users who are following
@@ -71,16 +71,17 @@ const UserController = async (server) => {
         const { userId } = req.auth.credentials;
         const response = await UserConnection.query()
           .where({
-            user_followed_id: userId
-          }).then((data) => {
+            user_followed_id: userId,
+          })
+          .then((data) => {
             return data;
           });
-          return response;
+        return response;
       } catch (err) {
         throw Boom.badRequest(err);
       }
-    }
-  })
+    },
+  });
 
   server.route({
     method: 'PUT',
@@ -123,8 +124,9 @@ const UserController = async (server) => {
         return response;
       } catch (err) {
         console.log(err);
+        return Boom.badRequest();
       }
-    }
+    },
   });
 
   server.route({
@@ -140,9 +142,10 @@ const UserController = async (server) => {
         return response;
       } catch (err) {
         console.log(err);
+        return Boom.badRequest();
       }
-    }
-  })
+    },
+  });
 };
 
 export default UserController;

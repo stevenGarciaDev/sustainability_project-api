@@ -26,6 +26,17 @@ const TaskController = async (server) => {
   server.route({
     method: 'GET',
     path: '/tasks',
+    handler: () => {
+      try {
+        return Task.query();
+      } catch (err) {
+        return err;
+      }
+    },
+  });
+  server.route({
+    method: 'GET',
+    path: '/tasks/user',
     handler: async (req) => {
       try {
         const tasks = await Task.query();
@@ -118,7 +129,16 @@ const TaskController = async (server) => {
       try {
         const userTasks = await UserTask.query()
           .join('user', 'user.id', 'user_task.user_id')
-          .select(['task_id', 'user_id', 'username', 'profile_photo', 'count'])
+          .join('task', 'task.id', 'user_task.task_id')
+          .select([
+            'task_id',
+            'task.name',
+            'user_id',
+            'username',
+            'profile_photo',
+            'count',
+          ])
+          .orderBy('username')
           .orderBy('count', 'desc')
           .where({
             taskId,

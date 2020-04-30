@@ -10,13 +10,15 @@ const AuthController = (server) => {
     method: 'POST',
     path: '/signup',
     handler: async (req) => {
-      const { username, password } = req.payload;
+      const { username, password, firstName, lastName } = req.payload;
       const hashedPassword = await bcrypt.hash(password, 12);
       try {
         const user = await transaction(User, async (User) => {
           return User.query().insert({
             username,
             password: hashedPassword,
+            firstName,
+            lastName,
           });
         });
         return generateToken(user.id);

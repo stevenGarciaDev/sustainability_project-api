@@ -15,6 +15,8 @@ describe('AuthController', () => {
       const payload = {
         username: 'test',
         password: 'password',
+        firstName: 'test',
+        lastName: 'ing',
       };
       const res = await server.inject({
         method: 'post',

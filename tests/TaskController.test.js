@@ -20,7 +20,7 @@ describe('TaskController', () => {
     it('returns an array of tasks with their total count and UserTask for the logged in user', async () => {
       const res = await server.inject({
         method: 'get',
-        url: '/tasks',
+        url: '/tasks/user',
         headers: {
           Authorization: authHeader,
         },

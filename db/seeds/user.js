@@ -6,30 +6,30 @@ exports.seed = async function(knex) {
     {
       username: 'user1',
       password: 'password',
-      firstName: 'test',
-      lastName: 'ing',
+      first_name: 'test',
+      last_name: 'ing',
     },
     {
       username: 'user2',
       password: 'password',
-      firstName: 'test',
-      lastName: 'ing',
+      first_name: 'test',
+      last_name: 'ing',
     },
     {
       username: 'user3',
       password: 'password',
-      firstName: 'test',
-      lastName: 'ing',
+      first_name: 'test',
+      last_name: 'ing',
     },
   ];
 
   await knex('user').insert(
     await Promise.all(
-      users.map(async ({ username, password, firstName, lastName }) => ({
+      users.map(async ({ username, password, first_name, last_name }) => ({
         username,
         password: await bcrypt.hash(password, 12),
-        firstName,
-        lastName,
+        first_name,
+        last_name,
       }))
     )
   );

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const bcrypt = require('bcrypt');
 
 exports.seed = async function(knex) {
